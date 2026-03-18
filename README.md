@@ -26,8 +26,18 @@ This project is a prototype of an Automated Optical Inspection (AOI) system desi
    - 将待测样本命名为 `gear_1.jpg`, `gear_2.jpg` 等。
 3. **运行检测**: `python main.py`
 
-## 📊 检测结果 (Results)
-| 状态 (Status) | 说明 (Description) | 判定 (Verdict) |
-| :--- | :--- | :--- |
-| **QUALIFIED** | 形状相似度与面积偏差在阈值内 | PASS (合格) |
-| **DEFECTIVE** | 存在几何缺损（如缺齿）或尺寸超差 | REJECT (不合格) |
+## 📊 检测结果展示 (Inspection Results Showcase)
+
+本系统采用严格的几何拓扑分析，可有效甄别外观细微差异。
+
+The system utilizes strict geometric topology analysis to effectively identify subtle visual differences.
+
+### 1. 合格样本 (Qualified Sample - PASS)
+> 形状极其贴合，几何特征与黄金样本高度一致。
+
+![Qualified Result](screenshots/result_qualified.jpg)
+
+### 2. 不合格样本 (Defective Sample - REJECT)
+> 虽然形状大致也是圆形，但由于铁锈纹理和diffuse边界，导致局部拓扑结构（方差）显著不一致，系统果断拦截。
+
+![Defective Result](screenshots/result_defective.jpg)
