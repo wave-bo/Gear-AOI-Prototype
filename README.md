@@ -1,29 +1,38 @@
-# JF-AOI: Industrial Gear Inspection System 
-### 基于计算机视觉的工业齿轮自动光学检测系统 (原型)
+# Gear-AOI-Prototype: Industrial Gear Inspection System 
+### 基于 Python + OpenCV 的工业齿轮自动检测原型 (A Vision-based Gear Inspection Tool)
 
 ---
 
 ## 🚀 项目简介 (Project Overview)
-本项目是一个专为工业流水线设计的自动光学检测（AOI）系统原型。通过 Python 与 OpenCV，实现了对精密金属零件（齿轮）的快速识别、形状比对及质量筛选。
+本项目是一个为工业流水线设计的自动光学检测（AOI）系统原型。主要解决了在生产线上，如何自动识别、定位并检测精密金属零件（如齿轮）是否存在缺损或质量问题。
 
-This project is a prototype of an Automated Optical Inspection (AOI) system designed for industrial production lines. Using Python and OpenCV, it enables rapid identification, shape comparison, and quality screening of precision metal parts (gears).
+This project is a prototype of an AOI system designed to automatically identify, locate, and inspect industrial gear parts for defects using Python and OpenCV.
 
-## 🛠️ 核心技术 (Technical Highlights)
-- **Hu-Moments 拓扑匹配**: 采用胡氏矩算法实现 360 度旋转无关的形状识别，确保零件在传送带上任意角度均可精准比对。
-- **形态学抗噪处理 (Morphology)**: 针对金属表面斑驳纹理与反光进行了闭合（Closing）算子优化，提升了复杂环境下的稳健性。
-- **重心定位算法 (Centroid Localization)**: 基于图像矩（Moments）计算几何重心：
+## 🛠️ 核心功能与原理 (Technical Highlights)
+
+### 1. 零件形状比对 (Shape Matching)
+- **技术**: Hu-Moments (胡氏矩)
+- **解决问题**: 利用数学上的旋转与缩放不变性 (Rotation and Scale Invariance)，解决了零件在传送带上**摆放角度不同**或离镜头**远近不一**导致的匹配失效问题，确保系统能精准“认出”零件。
+
+### 2. 图像降噪与增强 (Image Preprocessing)
+- **技术**: 多级形态学滤波 (Morphology)
+- **解决问题**: 针对金属零件表面常见的**高光反射 (Glare)** 与**锈斑干扰**，通过调整卷积核 (Kernel) 参数，在去除杂质噪声的同时，保护了零件边缘的清晰度。
+
+### 3. 重心定位与动态标注 (Centroid & Localization)
+- **技术**: 图像矩 (Image Moments)
+- **解决问题**: 实时计算零件的**物理重心 (Centroid)**：
   $$x = \frac{M_{10}}{M_{00}}, \quad y = \frac{M_{01}}{M_{00}}$$
-  确保检测标签动态跟随零件，解决了视觉溢出问题。
+  以中心点为基准实时跟随零件，确保检测结果的标签始终显示在零件上方。
 
-- **Hu-Moments Topology Matching**: Rotation-invariant shape recognition for 360° detection.
-- **Morphological Robustness**: Optimized closing operators for handling specular reflections and mottled textures on metal surfaces.
-- **Centroid Localization**: Dynamic label positioning based on geometric moments.
+### 4. 自动筛查逻辑 (Defect Detection)
+- **逻辑**: Golden Sample (标准件比对)
+- **解决问题**: 建立一个标准零件库，通过计算待测件与标准件之间的**形状差异得分 (Match Score)**。当得分超过设定阈值时，系统会自动拦截缺齿、变形等不合格产品。
 
 ## 📦 快速开始 (Quick Start)
 1. **环境准备**: `pip install opencv-python numpy`
 2. **准备样本**: 
-   - 将“黄金样本”命名为 `gear_golden.jpg` 放入根目录。
-   - 将待测样本命名为 `gear_1.jpg`, `gear_2.jpg` 等。
+   - 将标准件命名为 `gear_golden.jpg` 放入根目录。
+   - 将待测样片放入指定文件夹。
 3. **运行检测**: `python main.py`
 
 ## 📊 检测结果展示 (Inspection Results Showcase)
